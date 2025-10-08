@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Sale_Price_Calculator
+{
+    public partial class Form1 : Form
+    {
+        // 建構子：初始化表單元件
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        // 當使用者按下「計算特價」按鈕時觸發的事件處理方法
+        private void calculateButton_Click(object sender, EventArgs e)
+        {
+            // TODO: 在此加入計算特價的程式邏輯
+            decimal originalPrice;      // 原價
+            decimal discountPercentage; // 折扣百分比
+            decimal salePrice;         // 特價
+
+            // 取得並轉換使用者輸入的原價和折扣百分比
+            originalPrice = decimal.Parse(originalPriceTextBox.Text);
+            discountPercentage = decimal.Parse(discountPercentageTextBox.Text);
+
+            // 計算特價
+            salePrice = originalPrice * (1 - discountPercentage / 100.0m);
+
+            // 顯示特價結果
+            salePriceLabel.Text = salePrice.ToString("C");
+        }
+
+        // 當使用者按下「離開」按鈕時觸發的事件處理方法
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            // 關閉表單
+            this.Close();
+        }
+    }
+}
