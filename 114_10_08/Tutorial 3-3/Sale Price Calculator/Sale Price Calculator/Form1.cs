@@ -43,5 +43,20 @@ namespace Sale_Price_Calculator
             // 關閉表單
             this.Close();
         }
+
+        private void discPercentagePromptLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void outputDescriptionLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void originalPriceTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

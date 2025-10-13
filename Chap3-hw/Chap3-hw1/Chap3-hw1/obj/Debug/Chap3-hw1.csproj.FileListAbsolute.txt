@@ -1,0 +1,10 @@
+C:\Users\User\Desktop\114_1_C_Sharp\Chap3-hw\Chap3-hw1\Chap3-hw1\bin\Debug\Chap3-hw1.exe.config
+C:\Users\User\Desktop\114_1_C_Sharp\Chap3-hw\Chap3-hw1\Chap3-hw1\bin\Debug\Chap3-hw1.exe
+C:\Users\User\Desktop\114_1_C_Sharp\Chap3-hw\Chap3-hw1\Chap3-hw1\bin\Debug\Chap3-hw1.pdb
+C:\Users\User\Desktop\114_1_C_Sharp\Chap3-hw\Chap3-hw1\Chap3-hw1\obj\Debug\Chap3-hw1.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\114_1_C_Sharp\Chap3-hw\Chap3-hw1\Chap3-hw1\obj\Debug\Chap3_hw1.Form1.resources
+C:\Users\User\Desktop\114_1_C_Sharp\Chap3-hw\Chap3-hw1\Chap3-hw1\obj\Debug\Chap3_hw1.Properties.Resources.resources
+C:\Users\User\Desktop\114_1_C_Sharp\Chap3-hw\Chap3-hw1\Chap3-hw1\obj\Debug\Chap3-hw1.csproj.GenerateResource.cache
+C:\Users\User\Desktop\114_1_C_Sharp\Chap3-hw\Chap3-hw1\Chap3-hw1\obj\Debug\Chap3-hw1.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\114_1_C_Sharp\Chap3-hw\Chap3-hw1\Chap3-hw1\obj\Debug\Chap3-hw1.exe
+C:\Users\User\Desktop\114_1_C_Sharp\Chap3-hw\Chap3-hw1\Chap3-hw1\obj\Debug\Chap3-hw1.pdb
