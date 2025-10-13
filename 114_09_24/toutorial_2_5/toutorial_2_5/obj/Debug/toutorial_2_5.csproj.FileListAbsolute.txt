@@ -9,3 +9,13 @@ C:\Users\m303\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\obj\De
 C:\Users\m303\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\obj\Debug\toutorial_2_5.exe
 C:\Users\m303\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\obj\Debug\toutorial_2_5.pdb
 C:\Users\m303\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\obj\Debug\toutorial_2_5.exe.config
+C:\Users\User\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\bin\Debug\toutorial_2_5.exe.config
+C:\Users\User\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\bin\Debug\toutorial_2_5.exe
+C:\Users\User\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\bin\Debug\toutorial_2_5.pdb
+C:\Users\User\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\obj\Debug\toutorial_2_5.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\obj\Debug\toutorial_2_5.Form1.resources
+C:\Users\User\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\obj\Debug\toutorial_2_5.Properties.Resources.resources
+C:\Users\User\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\obj\Debug\toutorial_2_5.csproj.GenerateResource.cache
+C:\Users\User\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\obj\Debug\toutorial_2_5.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\obj\Debug\toutorial_2_5.exe
+C:\Users\User\Desktop\114_1_C_Sharp\114_09_24\toutorial_2_5\toutorial_2_5\obj\Debug\toutorial_2_5.pdb

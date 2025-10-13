@@ -41,5 +41,10 @@ namespace toutorial_2_5
             cardbackPictureBox.Visible = true;  // 顯示卡牌背面圖片
             cardfacePictureBox.Visible = false; // 隱藏卡牌正面圖片
         }
+
+        private void cardbackPictureBox_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
