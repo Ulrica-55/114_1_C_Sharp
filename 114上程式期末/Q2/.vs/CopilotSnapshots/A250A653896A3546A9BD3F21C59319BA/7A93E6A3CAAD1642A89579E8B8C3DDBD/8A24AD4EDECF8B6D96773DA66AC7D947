@@ -1,0 +1,223 @@
+﻿namespace Q2
+{
+    partial class Form1
+    {
+        /// <summary>
+        /// 設計工具所需的變數。
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        private System.Windows.Forms.GroupBox groupBoxServices;
+        private System.Windows.Forms.CheckBox chkOilChange;
+        private System.Windows.Forms.CheckBox chkTire;
+        private System.Windows.Forms.CheckBox chkBrake;
+
+        private System.Windows.Forms.GroupBox groupBoxCustomer;
+        private System.Windows.Forms.Label labelName;
+        private System.Windows.Forms.TextBox txtName;
+        private System.Windows.Forms.Label labelCar;
+        private System.Windows.Forms.TextBox txtCar;
+
+        private System.Windows.Forms.Button btnCalculate;
+        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Label labelTotalText;
+        private System.Windows.Forms.Label lblTotal;
+
+        /// <summary>
+        /// 清除任何使用中的資源。
+        /// </summary>
+        /// <param name="disposing">如果應該處置受控資源則為 true，否則為 false。</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form 設計工具產生的程式碼
+
+        /// <summary>
+        /// 此為設計工具支援所需的方法 - 請勿使用程式碼編輯器修改
+        /// 這個方法的內容。
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.groupBoxServices = new System.Windows.Forms.GroupBox();
+            this.chkBrake = new System.Windows.Forms.CheckBox();
+            this.chkTire = new System.Windows.Forms.CheckBox();
+            this.chkOilChange = new System.Windows.Forms.CheckBox();
+
+            this.groupBoxCustomer = new System.Windows.Forms.GroupBox();
+            this.labelName = new System.Windows.Forms.Label();
+            this.txtName = new System.Windows.Forms.TextBox();
+            this.labelCar = new System.Windows.Forms.Label();
+            this.txtCar = new System.Windows.Forms.TextBox();
+
+            this.btnCalculate = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.labelTotalText = new System.Windows.Forms.Label();
+            this.lblTotal = new System.Windows.Forms.Label();
+
+            this.SuspendLayout();
+            // 
+            // groupBoxServices
+            // 
+            this.groupBoxServices.Controls.Add(this.chkBrake);
+            this.groupBoxServices.Controls.Add(this.chkTire);
+            this.groupBoxServices.Controls.Add(this.chkOilChange);
+            this.groupBoxServices.Location = new System.Drawing.Point(24, 24);
+            this.groupBoxServices.Name = "groupBoxServices";
+            this.groupBoxServices.Size = new System.Drawing.Size(240, 140);
+            this.groupBoxServices.TabIndex = 0;
+            this.groupBoxServices.TabStop = false;
+            this.groupBoxServices.Text = "服務項目";
+            // 
+            // chkOilChange
+            // 
+            this.chkOilChange.AutoSize = true;
+            this.chkOilChange.Location = new System.Drawing.Point(16, 28);
+            this.chkOilChange.Name = "chkOilChange";
+            this.chkOilChange.Size = new System.Drawing.Size(121, 22);
+            this.chkOilChange.TabIndex = 0;
+            this.chkOilChange.Text = "機油更換 (1000)";
+            this.chkOilChange.UseVisualStyleBackColor = true;
+            // 
+            // chkTire
+            // 
+            this.chkTire.AutoSize = true;
+            this.chkTire.Location = new System.Drawing.Point(16, 60);
+            this.chkTire.Name = "chkTire";
+            this.chkTire.Size = new System.Drawing.Size(103, 22);
+            this.chkTire.TabIndex = 1;
+            this.chkTire.Text = "輪胎更換 (800)";
+            this.chkTire.UseVisualStyleBackColor = true;
+            // 
+            // chkBrake
+            // 
+            this.chkBrake.AutoSize = true;
+            this.chkBrake.Location = new System.Drawing.Point(16, 92);
+            this.chkBrake.Name = "chkBrake";
+            this.chkBrake.Size = new System.Drawing.Size(121, 22);
+            this.chkBrake.TabIndex = 2;
+            this.chkBrake.Text = "煞車維修 (1200)";
+            this.chkBrake.UseVisualStyleBackColor = true;
+
+            // 
+            // groupBoxCustomer
+            // 
+            this.groupBoxCustomer.Controls.Add(this.labelName);
+            this.groupBoxCustomer.Controls.Add(this.txtName);
+            this.groupBoxCustomer.Controls.Add(this.labelCar);
+            this.groupBoxCustomer.Controls.Add(this.txtCar);
+            this.groupBoxCustomer.Location = new System.Drawing.Point(280, 24);
+            this.groupBoxCustomer.Name = "groupBoxCustomer";
+            this.groupBoxCustomer.Size = new System.Drawing.Size(296, 140);
+            this.groupBoxCustomer.TabIndex = 1;
+            this.groupBoxCustomer.TabStop = false;
+            this.groupBoxCustomer.Text = "客戶資料";
+            // 
+            // labelName
+            // 
+            this.labelName.AutoSize = true;
+            this.labelName.Location = new System.Drawing.Point(16, 32);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(44, 18);
+            this.labelName.TabIndex = 0;
+            this.labelName.Text = "姓名:";
+            // 
+            // txtName
+            // 
+            this.txtName.Location = new System.Drawing.Point(80, 28);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(192, 29);
+            this.txtName.TabIndex = 1;
+            // 
+            // labelCar
+            // 
+            this.labelCar.AutoSize = true;
+            this.labelCar.Location = new System.Drawing.Point(16, 72);
+            this.labelCar.Name = "labelCar";
+            this.labelCar.Size = new System.Drawing.Size(44, 18);
+            this.labelCar.TabIndex = 2;
+            this.labelCar.Text = "車號:";
+            // 
+            // txtCar
+            // 
+            this.txtCar.Location = new System.Drawing.Point(80, 68);
+            this.txtCar.Name = "txtCar";
+            this.txtCar.Size = new System.Drawing.Size(192, 29);
+            this.txtCar.TabIndex = 3;
+
+            // 
+            // btnCalculate
+            // 
+            this.btnCalculate.Location = new System.Drawing.Point(24, 184);
+            this.btnCalculate.Name = "btnCalculate";
+            this.btnCalculate.Size = new System.Drawing.Size(120, 36);
+            this.btnCalculate.TabIndex = 2;
+            this.btnCalculate.Text = "計算總價";
+            this.btnCalculate.UseVisualStyleBackColor = true;
+            this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(160, 184);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(120, 36);
+            this.btnClear.TabIndex = 3;
+            this.btnClear.Text = "清除";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // labelTotalText
+            // 
+            this.labelTotalText.AutoSize = true;
+            this.labelTotalText.Font = new System.Drawing.Font("微軟正黑體", 10F);
+            this.labelTotalText.Location = new System.Drawing.Point(312, 192);
+            this.labelTotalText.Name = "labelTotalText";
+            this.labelTotalText.Size = new System.Drawing.Size(56, 21);
+            this.labelTotalText.TabIndex = 4;
+            this.labelTotalText.Text = "總價:";
+            // 
+            // lblTotal
+            // 
+            this.lblTotal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblTotal.Font = new System.Drawing.Font("微軟正黑體", 10F);
+            this.lblTotal.Location = new System.Drawing.Point(376, 184);
+            this.lblTotal.Name = "lblTotal";
+            this.lblTotal.Size = new System.Drawing.Size(120, 32);
+            this.lblTotal.TabIndex = 5;
+            this.lblTotal.Text = "0";
+            this.lblTotal.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(600, 250);
+            this.Controls.Add(this.groupBoxServices);
+            this.Controls.Add(this.groupBoxCustomer);
+            this.Controls.Add(this.btnCalculate);
+            this.Controls.Add(this.btnClear);
+            this.Controls.Add(this.labelTotalText);
+            this.Controls.Add(this.lblTotal);
+            this.Name = "Form1";
+            this.Text = "汽車維修服務";
+            this.Load += new System.EventHandler(this.Form1_Load);
+
+            this.groupBoxServices.ResumeLayout(false);
+            this.groupBoxServices.PerformLayout();
+            this.groupBoxCustomer.ResumeLayout(false);
+            this.groupBoxCustomer.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+    }
+}
+

@@ -1,0 +1,50 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Q2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCalculate_Click(object sender, EventArgs e)
+        {
+            int total = 0;
+            if (chkOilChange.Checked) total += 1000;
+            if (chkTire.Checked) total += 800;
+            if (chkBrake.Checked) total += 1200;
+
+            lblTotal.Text = total.ToString();
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            chkOilChange.Checked = false;
+            chkTire.Checked = false;
+            chkBrake.Checked = false;
+            txtName.Text = string.Empty;
+            txtCar.Text = string.Empty;
+            lblTotal.Text = "0";
+        }
+
+        private void groupBoxServices_Enter(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
