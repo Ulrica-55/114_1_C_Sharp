@@ -1,0 +1,65 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Q3
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+
+            // Initialize listBox with 8 sample items
+            for (int i = 1; i <= 8; i++)
+            {
+                this.listBox1.Items.Add("Item " + i);
+            }
+
+            // Ensure labels exist and set initial text
+            if (this.labelArray != null)
+            {
+                for (int i = 0; i < this.labelArray.Length; i++)
+                {
+                    if (this.labelArray[i] != null)
+                    {
+                        this.labelArray[i].Text = $"Label {i + 1}: {this.listBox1.Items[i]}";
+                        this.labelArray[i].ForeColor = Color.Black;
+                    }
+                }
+            }
+
+            // Subscribe to selection changed to demonstrate interaction
+            this.listBox1.SelectedIndexChanged += ListBox1_SelectedIndexChanged;
+        }
+
+        private void ListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int idx = this.listBox1.SelectedIndex;
+            if (idx < 0) return;
+
+            // Update labels to reflect selection; highlight selected label
+            for (int i = 0; i < this.labelArray.Length; i++)
+            {
+                if (this.labelArray[i] == null) continue;
+
+                if (i == idx)
+                {
+                    this.labelArray[i].Text = $"Label {i + 1}: SELECTED - {this.listBox1.Items[i]}";
+                    this.labelArray[i].ForeColor = Color.Red;
+                }
+                else
+                {
+                    this.labelArray[i].Text = $"Label {i + 1}: {this.listBox1.Items[i]}";
+                    this.labelArray[i].ForeColor = Color.Black;
+                }
+            }
+        }
+    }
+}

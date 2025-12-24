@@ -1,0 +1,206 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Q3
+{
+    public partial class Form1 : Form
+    {
+        // runtime array reference to labels
+        private Label[] labelArray;
+        // store currently generated numbers
+        private int[] currentNumbers = new int[5];
+        private Random rnd = new Random();
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            // build label array from designer labels
+            this.labelArray = new Label[] { this.label1, this.label2, this.label3, this.label4, this.label5, this.label6, this.label7, this.label8 };
+
+            // clear labels
+            for (int i = 0; i < 5; i++)
+            {
+                this.labelArray[i].Text = string.Empty;
+            }
+
+            // wire up events (designer already wired but ensure handlers exist)
+            this.button1.Click += button1_Click;
+            this.button2.Click += button2_Click;
+            this.button3.Click += button3_Click;
+        }
+
+        // Generate 5 unique numbers between 1 and 49 and display in label1..label5
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Use a HashSet to ensure uniqueness
+                HashSet<int> set = new HashSet<int>();
+                for (int i = 0; i < 5; i++)
+                {
+                    int num;
+                    // try until we get a unique number
+                    do
+                    {
+                        num = rnd.Next(1, 50); // 1..49
+                    }
+                    while (!set.Add(num));
+
+                    currentNumbers[i] = num;
+                }
+
+                // Sort for nicer display
+                Array.Sort(currentNumbers);
+
+                // Display in labels 1..5 using loop and string formatting
+                for (int i = 0; i < 5; i++)
+                {
+                    this.labelArray[i].Text = currentNumbers[i].ToString("D2");
+                }
+
+                // Also log to listBox
+                string line = "產生號碼: " + string.Join(", ", currentNumbers.Select(n => n.ToString("D2")));
+                this.listBox1.Items.Insert(0, line);
+            }
+            catch (Exception ex)
+            {
+                // exception handling example
+                MessageBox.Show("產生號碼時發生錯誤: " + ex.Message, "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Read winning numbers from a file using OpenFileDialog + StreamReader, then compare
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // Ensure user has generated numbers
+            if (currentNumbers == null || currentNumbers.Length < 5 || currentNumbers.All(n => n == 0))
+            {
+                MessageBox.Show("請先按「產生號碼」以產生號碼。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "選擇包含開獎號碼的文字檔";
+            ofd.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+
+            if (ofd.ShowDialog() != DialogResult.OK)
+            {
+                return; // user cancelled
+            }
+
+            try
+            {
+                List<int> winningList = new List<int>();
+
+                using (StreamReader sr = new StreamReader(ofd.FileName))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        // normalize separators: commas, semicolons, tabs
+                        string normalized = line.Replace(',', ' ').Replace(';', ' ').Replace('\t', ' ');
+                        string[] parts = normalized.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        foreach (string p in parts)
+                        {
+                            // try parse each token
+                            if (int.TryParse(p.Trim(), out int val))
+                            {
+                                // accept only range 1..49
+                                if (val >= 1 && val <= 49)
+                                {
+                                    winningList.Add(val);
+                                }
+                            }
+                            else
+                            {
+                                // try to parse numbers embedded with other chars, e.g. "01" with quotes
+                                string digits = new string(p.Where(char.IsDigit).ToArray());
+                                if (digits.Length > 0 && int.TryParse(digits, out int v2) && v2 >= 1 && v2 <= 49)
+                                {
+                                    winningList.Add(v2);
+                                }
+                            }
+
+                            // stop early if we already have 6 numbers
+                            if (winningList.Count >= 6) break;
+                        }
+
+                        if (winningList.Count >= 6) break;
+                    }
+                }
+
+                if (winningList.Count == 0)
+                {
+                    MessageBox.Show("檔案中找不到有效的開獎號碼 (1~49)。", "格式錯誤", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // If file provides fewer than 6 numbers it's still allowed; use what's available
+                int[] winning = winningList.ToArray();
+                Array.Sort(winning);
+
+                // count matches between currentNumbers and winning
+                int matchCount = 0;
+                for (int i = 0; i < currentNumbers.Length; i++)
+                {
+                    for (int j = 0; j < winning.Length; j++)
+                    {
+                        if (currentNumbers[i] == winning[j]) matchCount++;
+                    }
+                }
+
+                // determine prize based on matches (simple rule)
+                string prize;
+                if (matchCount >= 5) prize = "頭獎";
+                else if (matchCount == 4) prize = "貳獎";
+                else if (matchCount == 3) prize = "參獎";
+                else prize = "未中獎";
+
+                // display winning numbers and result as multiple lines in listbox
+                List<string> lines = new List<string>();
+                lines.Add("本期開獎號碼");
+                for (int i = 0; i < winning.Length; i++)
+                {
+                    lines.Add($"第{(i + 1)}號號碼: {winning[i].ToString("D2")} ");
+                }
+                lines.Add($"中獎數: {matchCount}，等級: {prize}");
+                lines.Add($"來源檔案: {Path.GetFileName(ofd.FileName)}");
+
+                // Insert lines so that header appears at top (insert in reverse order)
+                for (int i = lines.Count - 1; i >= 0; i--)
+                {
+                    this.listBox1.Items.Insert(0, lines[i]);
+                }
+
+                // show summary in label6..label8 if space available
+                this.label6.Text = "中獎數: " + matchCount.ToString();
+                this.label7.Text = prize;
+                this.label8.Text = Path.GetFileName(ofd.FileName);
+            }
+            catch (IOException ioex)
+            {
+                MessageBox.Show("讀取檔案時發生 IO 錯誤: " + ioex.Message, "檔案錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("處理開獎號碼時發生錯誤: " + ex.Message, "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            // exit
+            this.Close();
+        }
+    }
+}

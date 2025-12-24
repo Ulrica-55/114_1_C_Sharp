@@ -1,0 +1,138 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Q3
+{
+    public partial class Form1 : Form
+    {
+        // store currently generated numbers
+        private int[] currentNumbers = new int[5];
+        private Random rnd = new Random();
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            // build label array from designer labels
+            this.labelArray = new Label[] { this.label1, this.label2, this.label3, this.label4, this.label5, this.label6, this.label7, this.label8 };
+
+            // clear labels
+            for (int i = 0; i < 5; i++)
+            {
+                this.labelArray[i].Text = string.Empty;
+            }
+
+            // wire up events (designer already wired but ensure handlers exist)
+            this.button1.Click += button1_Click;
+            this.button2.Click += button2_Click;
+            this.button3.Click += button3_Click;
+        }
+
+        // Generate 5 unique numbers between 1 and 49 and display in label1..label5
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Use a HashSet to ensure uniqueness
+                HashSet<int> set = new HashSet<int>();
+                for (int i = 0; i < 5; i++)
+                {
+                    int num;
+                    // try until we get a unique number
+                    do
+                    {
+                        num = rnd.Next(1, 50); // 1..49
+                    }
+                    while (!set.Add(num));
+
+                    currentNumbers[i] = num;
+                }
+
+                // Sort for nicer display
+                Array.Sort(currentNumbers);
+
+                // Display in labels 1..5 using loop and string formatting
+                for (int i = 0; i < 5; i++)
+                {
+                    this.labelArray[i].Text = currentNumbers[i].ToString();
+                }
+
+                // Also log to listBox
+                string line = "產生號碼: " + string.Join(", ", currentNumbers.Select(n => n.ToString("D2")));
+                this.listBox1.Items.Insert(0, line);
+            }
+            catch (Exception ex)
+            {
+                // exception handling example
+                MessageBox.Show("產生號碼時發生錯誤: " + ex.Message, "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Simulate draw: generate 6 winning numbers, compare with currentNumbers and show results
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Ensure user has generated numbers
+                if (currentNumbers == null || currentNumbers.Length < 5 || currentNumbers.All(n => n == 0))
+                {
+                    MessageBox.Show("請先按「產生號碼」以產生號碼。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // generate 6 winning numbers
+                HashSet<int> set = new HashSet<int>();
+                while (set.Count < 6)
+                {
+                    set.Add(rnd.Next(1, 50));
+                }
+
+                int[] winning = set.ToArray();
+                Array.Sort(winning);
+
+                // count matches
+                int matchCount = 0;
+                for (int i = 0; i < currentNumbers.Length; i++)
+                {
+                    for (int j = 0; j < winning.Length; j++)
+                    {
+                        if (currentNumbers[i] == winning[j])
+                        {
+                            matchCount++;
+                        }
+                    }
+                }
+
+                // determine prize (simple rules)
+                string prize;
+                if (matchCount >= 5) prize = "頭獎";
+                else if (matchCount == 4) prize = "貳獎";
+                else if (matchCount == 3) prize = "參獎";
+                else prize = "未中獎";
+
+                // format and display
+                string winLine = "開獎號碼: " + string.Join(", ", winning.Select(n => n.ToString("D2")));
+                string resultLine = $"中獎數: {matchCount}，等級: {prize}";
+                this.listBox1.Items.Insert(0, resultLine);
+                this.listBox1.Items.Insert(0, winLine);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("開獎時發生錯誤: " + ex.Message, "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            // exit
+            this.Close();
+        }
+    }
+}
