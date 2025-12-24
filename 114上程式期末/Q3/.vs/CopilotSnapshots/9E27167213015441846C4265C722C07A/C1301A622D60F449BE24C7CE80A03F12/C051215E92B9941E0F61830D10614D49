@@ -17,9 +17,6 @@ namespace Q3
         private Label[] labelArray;
         // store currently generated numbers
         private int[] currentNumbers = new int[5];
-        // store winning numbers loaded from file (use -1 for empty slots)
-        private int[] winningNumbers = new int[5] { -1, -1, -1, -1, -1 };
-        private bool winningLoaded = false;
         private Random rnd = new Random();
 
         public Form1()
@@ -35,9 +32,6 @@ namespace Q3
                 this.labelArray[i].Text = string.Empty;
             }
 
-            // ensure label6 blank
-            this.label6.Text = string.Empty;
-
             // wire up events (designer already wired but ensure handlers exist)
             this.button1.Click += button1_Click;
             this.button2.Click += button2_Click;
@@ -45,7 +39,6 @@ namespace Q3
         }
 
         // Generate 5 unique numbers between 1 and 49 and display in label1..label5
-        // After generation, if winning numbers were loaded, compare and update label6
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -74,38 +67,8 @@ namespace Q3
                     this.labelArray[i].Text = currentNumbers[i].ToString("D2");
                 }
 
-                // If winning numbers loaded, compare and update label6
-                if (winningLoaded)
-                {
-                    int matchCount = 0;
-                    for (int i = 0; i < currentNumbers.Length; i++)
-                    {
-                        for (int j = 0; j < winningNumbers.Length; j++)
-                        {
-                            if (winningNumbers[j] == -1) continue;
-                            if (currentNumbers[i] == winningNumbers[j]) matchCount++;
-                        }
-                    }
-
-                    // Update label6 formatting
-                    this.label6.Font = new Font(this.label6.Font.FontFamily, 18F);
-                    this.label6.ForeColor = Color.Red;
-
-                    if (matchCount == 0)
-                    {
-                        this.label6.Text = "比對結果:\r\n\r\n中 " + matchCount.ToString() + "個號碼\r\n\r\n沒中獎";
-                    }
-                    else
-                    {
-                        this.label6.Text = "比對結果:\r\n\r\n中 " + matchCount.ToString() + "個號碼";
-                    }
-                }
-                else
-                {
-                    // If no winning loaded, clear label6
-                    this.label6.Text = string.Empty;
-                }
-
+                // Do not write generated numbers to listBox — wait until user opens draw file
+                // (previous behavior inserted a log line into listBox here)
             }
             catch (Exception ex)
             {
@@ -114,9 +77,16 @@ namespace Q3
             }
         }
 
-        // Read winning numbers from a file using OpenFileDialog + StreamReader, then store them and display
+        // Read winning numbers from a file using OpenFileDialog + StreamReader, then compare
         private void button2_Click(object sender, EventArgs e)
         {
+            // Ensure user has generated numbers
+            if (currentNumbers == null || currentNumbers.Length < 5 || currentNumbers.All(n => n == 0))
+            {
+                MessageBox.Show("請先按「產生號碼」以產生號碼。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "選擇包含開獎號碼的文字檔";
             ofd.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -174,25 +144,50 @@ namespace Q3
                     return;
                 }
 
-                // prepare winningNumbers array (take up to 5 numbers for display/comparison)
-                for (int i = 0; i < 5; i++) winningNumbers[i] = -1;
-                for (int i = 0; i < Math.Min(5, winningList.Count); i++)
+                // If file provides fewer than 6 numbers it's still allowed; use what's available
+                int[] winning = winningList.ToArray();
+                Array.Sort(winning);
+
+                // count matches between currentNumbers and winning
+                int matchCount = 0;
+                for (int i = 0; i < currentNumbers.Length; i++)
                 {
-                    winningNumbers[i] = winningList[i];
+                    for (int j = 0; j < winning.Length; j++)
+                    {
+                        if (currentNumbers[i] == winning[j]) matchCount++;
+                    }
                 }
-                winningLoaded = true;
+
+                // determine prize based on matches (simple rule)
+                string prize;
+                if (matchCount >= 5) prize = "頭獎";
+                else if (matchCount == 4) prize = "貳獎";
+                else if (matchCount == 3) prize = "參獎";
+                else prize = "未中獎";
 
                 // display winning numbers: clear listbox and show only header + five number lines
                 this.listBox1.Items.Clear();
                 this.listBox1.Items.Add("本期開獎號碼");
                 for (int i = 0; i < 5; i++)
                 {
-                    string val = (winningNumbers[i] != -1) ? winningNumbers[i].ToString("D2") : "--";
+                    string val = (i < winning.Length) ? winning[i].ToString("D2") : "--";
                     this.listBox1.Items.Add($"第{(i + 1)}號號碼: {val}");
                 }
 
-                // Clear previous compare result until user generates
-                this.label6.Text = string.Empty;
+                // show summary in label6 if space available
+                // Update label6 to show comparison result in red 18pt
+                this.label6.Font = new Font(this.label6.Font.FontFamily, 18F);
+                this.label6.ForeColor = Color.Red;
+                // include an empty line between the header and the count
+                if (matchCount == 0)
+                {
+                    this.label6.Text = "比對結果:\r\n\r\n中 " + matchCount.ToString() + "個號碼\r\n\r\n沒中獎";
+                }
+                else
+                {
+                    this.label6.Text = "比對結果:\r\n\r\n中 " + matchCount.ToString() + "個號碼";
+                }
+
             }
             catch (IOException ioex)
             {
