@@ -1,0 +1,260 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Q1
+{
+    public partial class Form1 : Form
+    {
+        // 將電腦的選擇使用 enum 表示
+        private enum Choice
+        {
+            Rock = 0,    // 石頭
+            Paper = 1,   // 布
+            Scissors = 2 // 剪刀
+        }
+
+        // 儲存電腦目前的選擇
+        private Choice compChoice;
+        // 儲存玩家目前的選擇
+        private Choice playerChoice;
+
+        // 計分
+        private int playerWins = 0;
+        private int compWins = 0;
+        private int draws = 0;
+
+        // Random 實例（static 可避免重複種子問題）
+        private static readonly Random rng = new Random();
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            // 綁定按鈕事件
+            this.stoneButton.Click += StoneButton_Click;
+            this.scissorButton.Click += ScissorButton_Click;
+            this.paperButton.Click += PaperButton_Click;
+            this.exitButton.Click += ExitButton_Click;
+        }
+
+        /// <summary>
+        /// 產生電腦的隨機選擇（石頭/布/剪刀），並儲存到 compChoice。
+        /// 也會回傳產生的選擇，方便其他方法使用。
+        /// </summary>
+        /// <returns>電腦的選擇 (Choice)</returns>
+        private Choice getCompChoice()
+        {
+            int val = rng.Next(0, 3); // 0,1,2
+            compChoice = (Choice)val;
+            return compChoice;
+        }
+
+        /// <summary>
+        /// 根據 compChoice，在對應的 PictureBox (computerPictureBox) 中顯示資源圖片。
+        /// 會處理先前顯示的影像並釋放。
+        /// </summary>
+        private void showComputerImage()
+        {
+            if (this.computerPictureBox == null)
+                return;
+
+            Bitmap resourceImage = null;
+            switch (compChoice)
+            {
+                case Choice.Rock:
+                    resourceImage = Properties.Resources.stone_computer;
+                    break;
+                case Choice.Paper:
+                    resourceImage = Properties.Resources.paper_computer;
+                    break;
+                case Choice.Scissors:
+                    resourceImage = Properties.Resources.scissor_computer;
+                    break;
+                default:
+                    resourceImage = null;
+                    break;
+            }
+
+            // 清除並釋放先前的 clone
+            var old = this.computerPictureBox.Image;
+            this.computerPictureBox.Image = null;
+            if (old != null)
+            {
+                old.Dispose();
+            }
+
+            if (resourceImage != null)
+            {
+                // 克隆資源圖以避免操作共享資源
+                this.computerPictureBox.Image = (Bitmap)resourceImage.Clone();
+                this.computerPictureBox.Visible = true;
+            }
+            else
+            {
+                this.computerPictureBox.Visible = false;
+            }
+        }
+
+        /// <summary>
+        /// 根據 playerChoice，在 playerPictureBox 中顯示資源圖片。
+        /// 會處理先前顯示的影像並釋放。
+        /// </summary>
+        private void showPlayerImage()
+        {
+            if (this.playerPictureBox == null)
+                return;
+
+            Bitmap resourceImage = null;
+            switch (playerChoice)
+            {
+                case Choice.Rock:
+                    resourceImage = Properties.Resources.stone_player;
+                    break;
+                case Choice.Paper:
+                    resourceImage = Properties.Resources.paper_player;
+                    break;
+                case Choice.Scissors:
+                    resourceImage = Properties.Resources.scissor_player;
+                    break;
+                default:
+                    resourceImage = null;
+                    break;
+            }
+
+            var old = this.playerPictureBox.Image;
+            this.playerPictureBox.Image = null;
+            if (old != null)
+            {
+                old.Dispose();
+            }
+
+            if (resourceImage != null)
+            {
+                this.playerPictureBox.Image = (Bitmap)resourceImage.Clone();
+                this.playerPictureBox.Visible = true;
+            }
+            else
+            {
+                this.playerPictureBox.Visible = false;
+            }
+        }
+
+        /// <summary>
+        /// 比較玩家和電腦的選擇，判斷輸贏，更新勝場計數，並顯示結果。
+        /// 結果會顯示在 label3（Designer 中已放置）
+        /// </summary>
+        private void showWinner()
+        {
+            // 確保有選擇
+            if (this.label3 == null)
+                return;
+
+            if (playerChoice == compChoice)
+            {
+                draws++;
+                // 平手時不顯示文字
+                this.label3.Text = string.Empty;
+                return;
+            }
+
+            bool playerWinsRound =
+                (playerChoice == Choice.Rock && compChoice == Choice.Scissors) ||
+                (playerChoice == Choice.Scissors && compChoice == Choice.Paper) ||
+                (playerChoice == Choice.Paper && compChoice == Choice.Rock);
+
+            if (playerWinsRound)
+            {
+                playerWins++;
+                this.label3.Text = "玩家贏";
+            }
+            else
+            {
+                compWins++;
+                this.label3.Text = "電腦贏";
+            }
+        }
+
+        /// <summary>
+        /// 建立一張簡單的 Bitmap，中央會顯示文字，用來代表石頭/布/剪刀。
+        /// (保留，未在顯示圖像時使用)
+        /// </summary>
+        private Bitmap CreateChoiceBitmap(string text, Color background, int width, int height)
+        {
+            var bmp = new Bitmap(width, height);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.Clear(background);
+                // 設定字體，稍微縮小以適應圖片
+                using (Font f = new Font(this.Font.FontFamily, Math.Max(10f, this.Font.Size * 0.8f), FontStyle.Bold))
+                using (Brush brush = new SolidBrush(Color.Black))
+                {
+                    var sf = new StringFormat()
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
+                    };
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                    g.DrawString(text, f, brush, new RectangleF(0, 0, width, height), sf);
+                }
+                // optional: draw a simple border
+                using (Pen p = new Pen(Color.Gray, 3))
+                {
+                    g.DrawRectangle(p, 1, 1, Math.Max(0, width - 3), Math.Max(0, height - 3));
+                }
+            }
+
+            return bmp;
+        }
+
+        // 事件處理器：玩家按下石頭
+        private void StoneButton_Click(object sender, EventArgs e)
+        {
+            playerChoice = Choice.Rock;
+            showPlayerImage();
+            getCompChoice();
+            showComputerImage();
+            showWinner();
+        }
+
+        // 玩家按下剪刀
+        private void ScissorButton_Click(object sender, EventArgs e)
+        {
+            playerChoice = Choice.Scissors;
+            showPlayerImage();
+            getCompChoice();
+            showComputerImage();
+            showWinner();
+        }
+
+        // 玩家按下布
+        private void PaperButton_Click(object sender, EventArgs e)
+        {
+            playerChoice = Choice.Paper;
+            showPlayerImage();
+            getCompChoice();
+            showComputerImage();
+            showWinner();
+        }
+
+        // 結束按鈕
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            string msg = $"遊戲結束\n玩家贏了: {playerWins} 次\n電腦贏了: {compWins} 次";
+            MessageBox.Show(msg, "遊戲結果", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Close();
+        }
+
+        // 現有的 Designer 綁定的事件（保留但空）
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}

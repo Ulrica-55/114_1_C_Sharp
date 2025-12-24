@@ -1,0 +1,134 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Q1
+{
+    public partial class Form1 : Form
+    {
+        // 將電腦的選擇使用 enum 表示
+        private enum Choice
+        {
+            Rock = 0,    // 石頭
+            Paper = 1,   // 布
+            Scissors = 2 // 剪刀
+        }
+
+        // 儲存電腦目前的選擇
+        private Choice compChoice;
+
+        // Random 實例（static 可避免重複種子問題）
+        private static readonly Random rng = new Random();
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        /// <summary>
+        /// 產生電腦的隨機選擇（石頭/布/剪刀），並儲存到 compChoice。
+        /// 也會回傳產生的選擇，方便其他方法使用。
+        /// </summary>
+        /// <returns>電腦的選擇 (Choice)</returns>
+        private Choice getCompChoice()
+        {
+            int val = rng.Next(0, 3); // 0,1,2
+            compChoice = (Choice)val;
+            return compChoice;
+        }
+
+        /// <summary>
+        /// 根據 compChoice，在對應的 PictureBox (computerPictureBox) 中顯示圖片。
+        /// 若 designer 有內建資源可以改為使用 Properties.Resources.xxx。
+        /// 若 computerPictureBox 已有 Image，會先 Dispose 掉以避免記憶體洩漏。
+        /// </summary>
+        private void showComputerImage()
+        {
+            string label;
+            Color bg;
+
+            switch (compChoice)
+            {
+                case Choice.Rock:
+                    label = "Rock";
+                    bg = Color.LightGray;
+                    break;
+                case Choice.Paper:
+                    label = "Paper";
+                    bg = Color.WhiteSmoke;
+                    break;
+                case Choice.Scissors:
+                    label = "Scissors";
+                    bg = Color.LightSteelBlue;
+                    break;
+                default:
+                    label = "?";
+                    bg = Color.Transparent;
+                    break;
+            }
+
+            // 使用 designer 中的 computerPictureBox 作為目標
+            if (this.computerPictureBox == null)
+                return;
+
+            int w = Math.Max(1, this.computerPictureBox.Width);
+            int h = Math.Max(1, this.computerPictureBox.Height);
+
+            using (Bitmap bmp = CreateChoiceBitmap(label, bg, w, h))
+            {
+                // 先釋放原本的 Image（如果有）
+                var old = this.computerPictureBox.Image;
+                // 必須先解除 pictureBox 的引用，才能 Dispose 原圖
+                this.computerPictureBox.Image = null;
+                if (old != null)
+                {
+                    old.Dispose();
+                }
+                // 指派新的 Image（複製一份，因為 bmp 在 using 之後會被處置）
+                this.computerPictureBox.Image = (Bitmap)bmp.Clone();
+            }
+        }
+
+        /// <summary>
+        /// 建立一張簡單的 Bitmap，中央會顯示文字，用來代表石頭/布/剪刀。
+        /// </summary>
+        private Bitmap CreateChoiceBitmap(string text, Color background, int width, int height)
+        {
+            var bmp = new Bitmap(width, height);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.Clear(background);
+                // 設定字體，稍微縮小以適應圖片
+                using (Font f = new Font(this.Font.FontFamily, Math.Max(10f, this.Font.Size * 0.8f), FontStyle.Bold))
+                using (Brush brush = new SolidBrush(Color.Black))
+                {
+                    var sf = new StringFormat()
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
+                    };
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                    g.DrawString(text, f, brush, new RectangleF(0, 0, width, height), sf);
+                }
+                // optional: draw a simple border
+                using (Pen p = new Pen(Color.Gray, 3))
+                {
+                    g.DrawRectangle(p, 1, 1, Math.Max(0, width - 3), Math.Max(0, height - 3));
+                }
+            }
+
+            return bmp;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}

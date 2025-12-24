@@ -1,0 +1,51 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Q1
+{
+    public partial class Form1 : Form
+    {
+        // 將電腦的選擇使用 enum 表示
+        private enum Choice
+        {
+            Rock = 0,    // 石頭
+            Paper = 1,   // 布
+            Scissors = 2 // 剪刀
+        }
+
+        // 儲存電腦目前的選擇
+        private Choice compChoice;
+
+        // Random 實例（static 可避免重複種子問題）
+        private static readonly Random rng = new Random();
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        /// <summary>
+        /// 產生電腦的隨機選擇（石頭/布/剪刀），並儲存到 compChoice。
+        /// 也會回傳產生的選擇，方便其他方法使用。
+        /// </summary>
+        /// <returns>電腦的選擇 (Choice)</returns>
+        private Choice getCompChoice()
+        {
+            int val = rng.Next(0, 3); // 0,1,2
+            compChoice = (Choice)val;
+            return compChoice;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
